@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数2 基礎練習問題 — 三角関数・指数対数関数</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6f0;
+  --surface: #ffffff;
+  --ink: #1a1a2e;
+  --muted: #6b6570;
+  --accent: #2d6a8f;
+  --accent-weak: color-mix(in oklab, var(--accent) 10%, var(--surface));
+  --accent-strong: #1e4d6b;
+  --line: color-mix(in oklab, var(--ink) 10%, transparent);
+  --correct: #3a8d5d;
+  --correct-weak: color-mix(in oklab, var(--correct) 8%, var(--surface));
+  --step-0: clamp(0.95rem, 0.92rem + 0.2vw, 1.05rem);
+  --step-1: clamp(1.1rem, 1.05rem + 0.3vw, 1.25rem);
+  --step-2: clamp(1.4rem, 1.2rem + 0.8vw, 1.8rem);
+  --step-3: clamp(1.8rem, 1.5rem + 1.2vw, 2.4rem);
+  --space: clamp(1rem, 0.8rem + 0.8vw, 1.5rem);
+  --radius: 10px;
+  --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 6px 18px -8px rgba(0,0,0,0.14);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+  font-size: var(--step-0);
+  line-height: 1.85;
+  color: var(--ink);
+  background: var(--bg);
+  padding: var(--space);
+}
+
+.container {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* Header */
+header {
+  text-align: center;
+  padding: calc(var(--space)*1.8) 0 calc(var(--space)*1.2);
+  margin-bottom: calc(var(--space)*1.2);
+  border-bottom: 2px solid var(--accent);
+  position: relative;
+}
+
+header::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 60px; height: 4px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+header h1 {
+  font-size: var(--step-3);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  color: var(--accent-strong);
+}
+
+header .subtitle {
+  font-size: var(--step-0);
+  color: var(--muted);
+  margin-top: 0.4em;
+}
+
+header .meta {
+  display: inline-flex;
+  gap: 1.2em;
+  margin-top: 0.8em;
+  font-size: 0.9em;
+  color: var(--muted);
+}
+
+header .meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+}
+
+/* Section */
+.section {
+  margin-bottom: calc(var(--space)*1.8);
+}
+
+.section-title {
+  font-size: var(--step-2);
+  font-weight: 700;
+  color: var(--accent-strong);
+  margin-bottom: calc(var(--space)*0.8);
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.section-title .num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6em; height: 1.6em;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 0.7em;
+  font-weight: 700;
+}
+
+.section-desc {
+  color: var(--muted);
+  margin-bottom: calc(var(--space)*0.8);
+  font-size: 0.95em;
+}
+
+/* Problem card */
+.problem {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--accent);
+  padding: calc(var(--space)*0.9) calc(var(--space)*1.1);
+  margin-bottom: calc(var(--space)*0.9);
+}
+
+.problem-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  margin-bottom: 0.5em;
+}
+
+.problem-number {
+  font-weight: 700;
+  font-size: var(--step-1);
+  color: var(--accent);
+}
+
+.problem-tag {
+  font-size: 0.75em;
+  padding: 0.15em 0.6em;
+  background: var(--accent-weak);
+  color: var(--accent-strong);
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+.problem-body {
+  padding-left: 0.2em;
+}
+
+.problem-body p {
+  margin-bottom: 0.4em;
+}
+
+.problem-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* Math styling */
+.math {
+  font-family: "Times New Roman", "Hiragino Mincho ProN", serif;
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+
+.fraction {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  margin: 0 0.15em;
+}
+
+.fraction .top {
+  display: block;
+  border-bottom: 1px solid var(--ink);
+  padding: 0 0.2em;
+}
+
+.fraction .bottom {
+  display: block;
+  padding: 0 0.2em;
+}
+
+/* Answer section */
+.answer {
+  background: var(--correct-weak);
+  border-radius: var(--radius);
+  border-left: 4px solid var(--correct);
+  padding: calc(var(--space)*0.8) calc(var(--space)*1.1);
+  margin-top: calc(var(--space)*0.7);
+}
+
+.answer-header {
+  font-weight: 700;
+  color: var(--correct);
+  font-size: var(--step-1);
+  margin-bottom: 0.4em;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.answer-body {
+  padding-left: 0.2em;
+}
+
+.answer-body p, .answer-body li {
+  margin-bottom: 0.3em;
+}
+
+.answer-body ol, .answer-body ul {
+  padding-left: 1.4em;
+}
+
+/* Hint */
+.hint {
+  background: #fff8e7;
+  border-left: 4px solid #d4a017;
+  border-radius: var(--radius);
+  padding: calc(var(--space)*0.6) calc(var(--space)*1.0);
+  margin-top: calc(var(--space)*0.5);
+  font-size: 0.92em;
+  color: #5a4a20;
+}
+
+.hint strong {
+  color: #8b6914;
+}
+
+/* Print */
+@media print {
+  body {
+    background: #fff;
+    padding: 0;
+    font-size: 10.5pt;
+    line-height: 1.7;
+  }
+  .container {
+    max-width: 100%;
+  }
+  .problem, .answer {
+    box-shadow: none;
+    border: 1px solid #ddd;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .section {
+    break-inside: auto;
+    page-break-inside: auto;
+  }
+  header {
+    padding-top: 0.5em;
+  }
+}
+
+@page {
+  size: A4;
+  margin: 15mm 18mm;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>数2 基礎練習問題</h1>
+  <p class="subtitle">三角関数・指数・対数関数</p>
+  <div class="meta">
+    <span>対象：県立通信制高校</span>
+    <span>レベル：基本〜標準</span>
+    <span>問題数：各単元5問</span>
+  </div>
+</header>
+
+<!-- ==================== 三角関数 ==================== -->
+<section class="section">
+  <h2 class="section-title"><span class="num">1</span>三角関数</h2>
+  <p class="section-desc">弧度法、三角関数の値、加法定理、三角方程式の基本問題です。公式を確認しながら丁寧に解いてください。</p>
+
+  <article class="problem">
+    <div class="problem-header">
+      <span class="problem-number">問1</span>
+      <span class="problem-tag">弧度法</span>
+    </div>
+    <div class="problem-body">
+      <p>次の角度を、度数法（度）から弧度法（ラジアン）に変換しなさい。</p>
+      <p>（1）60°　（2）135°　（3）-30°</p>
+    </div>
+    <div class="answer">
+      <div class="answer-header">解答</div>
+      <div class="answer-body">
+        <p>（1）60° = <span class="fraction"><span class="top">π</span><span class="bottom">3</span></span>　（2）135° = <span class="fraction"><span class="top">3π</span><span class="bottom">4</span></span>　（3）-30° = -<span class="fraction"><span class="top">π</span><span class="bottom">6</span></span></p>
+      </div>
+    </div>
+    <div class="hint">
+      <strong>ヒント：</strong>180° = π [rad] を基準に、比例して変換します。
+    </div>
+  </article>
+
+  <article class="problem">
+    <div class="problem-header">
+      <span class="problem-number">問2</span>
+      <span class="problem-tag">三角関数の値</span>
+    </div>
+    <div class="problem-body">
+      <p>次の三角関数の値を求めなさい。</p>
+      <p>（1）sin <span class="fraction"><span class="top">2π</span><span class="bottom">3</span></span>　（2）cos <span class="fraction"><span class="top">7π</span><span class="bottom">6</span></span>　（3）tan <span class="fraction"><span class="top">3π</span><span class="bottom">4</span></span></p>
+    </div>
+    <div class="answer">
+      <div class="answer-header">解答</div>
+      <div class="answer-body">
+        <p>（1）sin <span class="fraction"><span class="top">2π</span><span class="bottom">3</span></span> = <span class="fraction"><span class="top">√3</span><span class="bottom">2</span></span></p>
+        <p>（2）cos <span class="fraction"><span class="top">7π</span><span class="bottom">6</span></span> = -<span class="fraction"><span class="top">√3</span><span class="bottom">2</span></span></p>
+        <p>（3）tan <span class="fraction"><span class="top">3π</span><span class="bottom">4</span></span> = -1</p>
+      </div>
+    </div>
+    <div class="hint">
+      <strong>ヒント：</strong>単位円で考えて、象限に注意しましょう。第2象限では sin &gt; 0、cos &lt; 0 です。
+    </div>
+  </article>
+
+  <article class="problem">
+    <div class="problem-header">
+      <span class="problem-number">問3</span>
+      <span class="problem-tag">加法定理</span>
+    </div>
+    <div class="problem-body">
+      <p>sin(α + β) = sin α cos β + cos α sin β を使って、sin 75° の値を求めなさい。</p>
+    </div>
+    <div class="answer">
+      <div class="answer-header">解答</div>
+      <div class="answer-body">
+        <p>sin 75° = sin(45° + 30°)</p>
+        <p>= sin 45° cos 30° + cos 45° sin 30°</p>
+        <p>= <span class="fraction"><span class="top">√2</span><span class="bottom">2</span></span> × <span class="fraction"><span class="top">√3</span><span class="bottom">2</span></span> + <span class="fraction"><span class="top">√2</span><span class="bottom">2</span></span> × <span class="fraction"><span class="top">1</span><span class="bottom">2</span></span></p>
+        <p>= <span class="fraction"><span class="top">√6</span><span class="bottom">4</span></span> + <span class="fraction"><span class="top">√2</span><span class="bottom">4</span></span> = <span class="fraction"><span class="top">√6 + √2</span><span class="bottom">4</span></span></p>
+      </div>
+    </div>
+    <div class="hint">
+      <strong>ヒント：</strong>75° = 45° + 30° と分解して、既知の角度の値を使います。
+    </div>
+  </article>
+
+  <article class="problem">
+    <div class="problem-header">
+      <span class="problem-number">問4</span>
+      <span class="problem-tag">三角方程式</span>
+    </div>
+    <div class="problem-body">
+      <p>0 ≤ θ &lt; 2π の範囲で、次の方程式を解きなさい。</p>
+      <p>（1）2 sin θ - 1 = 0　（2）cos θ = -<span class="fraction"><span class="top">1</span><span class="bottom">2</span></span></p>
+    </div>
+    <div class="answer">
+      <div class="answer-header">解答</div>
+      <div class="answer-body">
+        <p>（1）sin θ = <span class="fraction"><span class="top">1</span><span class="bottom">2</span></span>　より　θ = <span class="fraction"><span class="top">π</span><span class="bottom">6</span></span> , <span class="fraction"><span class="top">5π</span><span class="bottom">6</span></span></p>
+        <p>（2）cos θ = -<span class="fraction"><span class="top">1</span><span class="bottom">2</span></span>　より　θ = <span class="fraction"><span class="top">2π</span><span class="bottom">3</span></span> , <span class="fraction"><span class="top">4π</span><span class="bottom">3</span></span></p>
+      </div>
+    </div>
+    <div class="hint">
+      <strong>ヒント：</strong>sin θ = a の解は単位円で y = a の直線との交点を探します。cos は x 座標に注目しましょう。
+    </div>
+  </article>
+
+  <article class="problem">
+    <div class="problem-header">
+      <span class="problem-number">5</span>
+      <span class="problem-tag">三角関数の合成</span>
+    </div>
+    <div class="problem-body">
+      <p>sin θ + √3 cos θ を r sin(θ + α) （r &gt; 0, 0 ≤ α &lt; 2π）の形に変形しなさい。</p>
+    </div>
+    <div class="answer">
+      <div class="answer-header">解答</div>
+      <div class="answer-body">
+        <p>r = √(1² + (√3)²) = √4 = 2</p>
+        <p>cos α = <span class="fraction"><span class="top">1</span><span class="bottom">2</span></span> ,　sin α = <span class="fraction"><span class="top">√3</span><span class="bottom">2</span></span>　より　α = <span class="fraction"><span class="top">π</span><span class="bottom">3</span></span></p>
+        <p>したがって　sin θ + √3 cos θ = 2 sin(θ + <span class="fraction"><span class="top">π</span><span class="bottom">3</span></span>)</p>
+      </div>
+    </div>
+    <div class="hint">
+      <strong>ヒント：</strong>r = √(a² + b²) を先に求め、cos α = <span class="fraction"><span class="top">a</span><span class="bottom">r</span></span> , sin α = <span class="fraction"><span class="top">b</span><span class="bottom">r</span></span> から α を定めます。
+    </div>
+  </article>
+</section>
+
+<!-- ==================== 指数・対数関数 ==================== -->
+<section class="section">
+  <h2 class="section-title"><span class="num">2</span>指数・対数関数</h2>
+  <p class="section-desc">指数法則、対数の性質、指数方程式・対数方程式の基本問題です。計算の手順を一つずつ確認しながら進めてください。</p>
+
+  <article class="problem">
+    <div class="problem-header">
+      <span class="problem-number">問1</span>
+      <span class="problem-tag">指数法則</span>
+    </div>
+    <div class="problem-body">
+      <p>次の式を計算しない。</p>
+      <p>（1）2³ × 2⁻² ÷ 2⁻¹　（2）(3²)³ ÷ 3⁴　（3）8<sup><span class="fraction"><span class="top">2</span><span class="bottom">3</span></span></sup></p>
+    </div>
+    <div class="answer">
+      <div class="answer-header">解答</div>
+      <div class="answer-body">
+        <p>（1）2³ × 2⁻² ÷ 2⁻¹ = 2<sup>3 + (-2) - (-1)</sup> = 2² = 4</p>
+        <p>（2）(3²)³ ÷ 3⁴ = 3⁶ ÷ 3⁴ = 3² = 9</p>
+        <p>（3）8<sup><span class="fraction"><span class="top">2</span><span class="bottom">3</span></span></sup> = (2³)<sup><span class="fraction"><span class="top">2</span><span class="bottom">3</span></span></sup> = 2² = 4</p>
+      </div>
+    </div>
+    <div class="hint">
+      <strong>ヒント：</strong>a<sup>m</sup> × a<sup>n</sup> = a<sup>m+n</sup>、a<sup>m</sup> ÷ a<sup>n</sup> = a<sup>m-n</sup>、(a<sup>m</sup>)<sup>n</sup> = a<sup>mn</sup> を確認しましょう。
+    </div>
+  </article>
+
+  <article class="problem">
+    <div class="problem-header">
+      <span class="problem-number">問2</span>
+      <span class="problem-tag">対数の性質</span>
+    </div>
+    <div class="problem-body">
+      <p>log₁₀ 2 = 0.301、log₁₀ 3 = 0.477 のとき、次の値を求めなさい。</p>
+      <p>（1）log₁₀ 6　（2）log₁₀ 12　（3）log₁₀ √5</p>
+    </div>
+    <div class="answer">
+      <div class="answer-header">解答</div>
+      <div class="answer-body">
+        <p>（1）log₁₀ 6 = log₁₀(2 × 3) = log₁₀ 2 + log₁₀ 3 = 0.301 + 0.477 = 0.778</p>
+        <p>（2）log₁₀ 12 = log₁₀(2² × 3) = 2 log₁₀ 2 + log₁₀ 3 = 2 × 0.301 + 0.477 = 1.079</p>
+        <p>（3）log₁₀ √5 = <span class="fraction"><span class="top">1</span><span class="bottom">2</span></span> log₁₀ 5 = <span class="fraction"><span class="top">1</span><span class="bottom">2</span></span> log₁₀ <span class="fraction"><span class="top">10</span><span class="bottom">2</span></span> = <span class="fraction"><span class="top">1</span><span class="bottom">2</span></span>(1 - 0.301) = 0.3495</p>
+      </div>
+    </div>
+    <div class="hint">
+      <strong>ヒント：</strong>log(ab) = log a + log b、log(a/b) = log a - log b、log aⁿ = n log a を使います。√5 = 5<sup><span class="fraction"><span class="top">1</span><span class="bottom">2</span></span></sup> です。
+    </div>
+  </article>
+
+  <article class="problem">
+    <div class="problem-header">
+      <span class="problem-number">問3</span>
+      <span class="problem-tag">対数の定義</span>
+    </div>
+    <div class="problem-body">
+      <p>次の対数を求めなさい。</p>
+      <p>（1）log₂ 32　（2）log₃ <span class="fraction"><span class="top">1</span><span class="bottom">9</span></span>　（3）log₅ √125</p>
+    </div>
+    <div class="answer">
+      <div class="answer-header">解答</div>
+      <div class="answer-body">
+        <p>（1）2⁵ = 32 より　log₂ 32 = 5</p>
+        <p>（2）3⁻² = <span class="fraction"><span class="top">1</span><span class="bottom">9</span></span> より　log₃ <span class="fraction"><span class="top">1</span><span class="bottom">9</span></span> = -2</p>
+        <p>（3）√125 = 125<sup><span class="fraction"><span class="top">1</span><span class="bottom">2</span></span></sup> = (5³)<sup><span class="fraction"><span class="top">1</span><span class="bottom">2</span></span></sup> = 5<sup><span class="fraction"><span class="top">3</span><span class="bottom">2</span></span></sup>　より　log₅ √125 = <span class="fraction"><span class="top">3</span><span class="bottom">2</span></span></p>
+      </div>
+    </div>
+    <div class="hint">
+      <strong>ヒント：</strong>log<sub>a</sub> b = c ⇔ a<sup>c</sup> = b です。まず「何乗すれば…」と考えましょう。
+    </div>
+  </article>
+
+  <article class="problem">
+    <div class="problem-header">
+      <span class="problem-number">問4</span>
+      <span class="problem-tag">指数方程式</span>
+    </div>
+    <div class="problem-body">
+      <p>次の方程式を解きなさい。</p>
+      <p>（1）3<sup>x</sup> = 81　（2）2<sup>2x-1</sup> = <span class="fraction"><span class="top">1</span><span class="bottom">32</span></span></p>
+    </div>
+    <div class="answer">
+      <div class="answer-header">解答</div>
+      <div class="answer-body">
+        <p>（1）81 = 3⁴ より　3<sup>x</sup> = 3⁴　したがって　x = 4</p>
+        <p>（2）<span class="fraction"><span class="top">1</span><span class="bottom">32</span></span> = <span class="fraction"><span class="top">1</span><span class="bottom">2⁵</span></span> = 2⁻⁵ より　2<sup>2x-1</sup> = 2⁻⁵</p>
+        <p>2x - 1 = -5　より　2x = -4　したがって　x = -2</p>
+      </div>
+    </div>
+    <div class="hint">
+      <strong>ヒント：</strong>両辺を同じ底のべきにそろえて、指数部分を等しくします。
+    </div>
+  </article>
+
+  <article class="problem">
+    <div class="problem-header">
+      <span class="problem-number">問5</span>
+      <span class="problem-tag">対数方程式</span>
+    </div>
+    <div class="problem-body">
+      <p>次の方程式を解きなさい。</p>
+      <p>（1）log₂ x = 5　（2）log₃(x - 1) = 2　（3）log₂(x + 3) + log₂(x - 1) = log₂ 5</p>
+    </div>
+    <div class="answer">
+      <div class="answer-header">解答</div>
+      <div class="answer-body">
+        <p>（1）log₂ x = 5 より　x = 2⁵ = 32</p>
+        <p>（2）log₃(x - 1) = 2 より　x - 1 = 3² = 9　したがって　x = 10</p>
+        <p>（3）log₂(x + 3)(x - 1) = log₂ 5 より　(x + 3)(x - 1) = 5</p>
+        <p>x² + 2x - 3 = 5　より　x² + 2x - 8 = 0</p>
+        <p>(x + 4)(x - 2) = 0　より　x = -4, 2</p>
+        <p>真数条件より x &gt; 1 なので　x = 2</p>
+      </div>
+    </div>
+    <div class="hint">
+      <strong>ヒント：</strong>（3）は log a + log b = log(ab) を使います。最後に必ず真数条件（log の中身 &gt; 0）を確認しましょう。
+    </div>
+  </article>
+</section>
+
+<footer style="text-align:center; color: var(--muted); font-size: 0.85em; padding: calc(var(--space)*1.5) 0; border-top: 1px solid var(--line);">
+  <p>頑張って解いてな！わからんとこあったら、遠慮せんと聞いてや。</p>
+</footer>
+
+</div>
+</body>
+</html>
